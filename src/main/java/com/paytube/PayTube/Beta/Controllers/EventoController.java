@@ -20,7 +20,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.paytube.PayTube.Beta.Model.Evento;
 import com.paytube.PayTube.Beta.repository.ConvidadoRepository;
 import org.springframework.web.servlet.ModelAndView;
-import org.hibernate.Session;
 
 
 /**
@@ -35,8 +34,6 @@ public class EventoController {
     
     @Autowired
 	private ConvidadoRepository cr;
-    
-    private Session session;
     
     @RequestMapping(value="/cadastrarEvento", method=RequestMethod.GET)
 	public String form(){
