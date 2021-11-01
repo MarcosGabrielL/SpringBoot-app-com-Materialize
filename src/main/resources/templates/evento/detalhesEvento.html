@@ -1,21 +1,22 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<!DOCTYPE html>
 <html xmlns:th="http://thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
 	<title>EventosApp</title>
 	 <!--Import Google Icon Font-->
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+      <!--Import materialize.css-->
+      <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css"  media="screen,projection"/>
 
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-     
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      
+      <link rel="stylesheet" href="style/styleCss.css"/>
 </head>
 <body>
 
 	<header>
-		<nav>
+		<nav class="menu">
 		    <div class="nav-wrapper">
 		      <a href="#" class="brand-logo">Evento</a>
 		      <ul id="nav-mobile" class="right hide-on-med-and-down">
@@ -35,7 +36,7 @@
 		</div>
 	</div>
 	
-		 <th:block th:include="mensagemValidacao"></th:block> 
+		 <th:block th:include="mensagemValidacao"></th:block>
 		<div class="container formConvidado">
 		<form method="post" th:object="${convidado}">
 			Nome: <input type="text" value="" name="nomeConvidado" placeholder="Nome Completo"/>
@@ -56,8 +57,8 @@
 			<tr th:each="convidado : ${convidados}">
 				<td><span th:text="${convidado.nomeConvidado}"></span></td>
 				<td><span th:text="${convidado.rg}"></span></td>
-				 <td><a class="waves-effect waves-light" th:href="${(#mvc.url('EC#deletarConvidado').arg(0, convidado.rg)).build()}"><i class="material-icons left">delete</i></a></td>
-			 </tr>
+				<td><a class="waves-effect waves-light btn-small" th:href="${(#mvc.url('EC#deletarConvidado').arg(0, convidado.rg)).build()}"><i class="material-icons left">delete</i></a></td>
+			</tr>
 		</tbody>
 	</table>
 	

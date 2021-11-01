@@ -1,43 +1,35 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.paytube.PayTube.Beta.Controllers;
+package com.eventosapp.controllers;
 
-import com.paytube.PayTube.Beta.Model.Convidado;
-import com.paytube.PayTube.Beta.repository.EventoRepository;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import javax.validation.Valid;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.paytube.PayTube.Beta.Model.Evento;
-import com.paytube.PayTube.Beta.repository.ConvidadoRepository;
-import org.springframework.web.servlet.ModelAndView;
+import com.eventosapp.models.Convidado;
+import com.eventosapp.models.Evento;
+import com.eventosapp.repository.ConvidadoRepository;
+import com.eventosapp.repository.EventoRepository;
 
-
-/**
- *
- * @author Marcos
- */
 @Controller
 public class EventoController {
-    
-    @Autowired
+
+	@Autowired
 	private EventoRepository er;
-    
-    @Autowired
+	
+	@Autowired
 	private ConvidadoRepository cr;
-    
-    @RequestMapping(value="/cadastrarEvento", method=RequestMethod.GET)
+	
+	@RequestMapping(value="/cadastrarEvento", method=RequestMethod.GET)
 	public String form(){
-		return "eventos/formEvento";
+		return "evento/formEvento";
 	}
 	
 	@RequestMapping(value="/cadastrarEvento", method=RequestMethod.POST)
@@ -54,7 +46,7 @@ public class EventoController {
 	
 	@RequestMapping("/eventos")
 	public ModelAndView listaEventos(){
-		ModelAndView mv = new ModelAndView("index");
+		ModelAndView mv = new ModelAndView("listaEventos");
 		Iterable<Evento> eventos = er.findAll();
 		mv.addObject("eventos", eventos);
 		return mv;
@@ -63,7 +55,7 @@ public class EventoController {
 	@RequestMapping(value="/{codigo}", method=RequestMethod.GET)
 	public ModelAndView detalhesEvento(@PathVariable("codigo") long codigo){
 		Evento evento = er.findByCodigo(codigo);
-		ModelAndView mv = new ModelAndView("eventos/detalhesEvento");
+		ModelAndView mv = new ModelAndView("evento/detalhesEvento");
 		mv.addObject("evento", evento);
 		
 		Iterable<Convidado> convidados = cr.findByEvento(evento);
@@ -82,17 +74,14 @@ public class EventoController {
 	
 	@RequestMapping(value="/{codigo}", method=RequestMethod.POST)
 	public String detalhesEventoPost(@PathVariable("codigo") long codigo, @Valid Convidado convidado,  BindingResult result, RedirectAttributes attributes){
-                System.err.println("RESUTSS"+result.hasErrors());
-            if(result.hasErrors()){
+		if(result.hasErrors()){
 			attributes.addFlashAttribute("mensagem", "Verifique os campos!");
 			return "redirect:/{codigo}";
 		}
 		Evento evento = er.findByCodigo(codigo);
 		convidado.setEvento(evento);
-                //session.persist(convidado);
 		cr.save(convidado);
 		attributes.addFlashAttribute("mensagem", "Convidado adicionado com sucesso!");
-                
 		return "redirect:/{codigo}";
 	}
 	
@@ -106,4 +95,4 @@ public class EventoController {
 		String codigo = "" + codigoLong;
 		return "redirect:/" + codigo;
 	}
-}
+}	
